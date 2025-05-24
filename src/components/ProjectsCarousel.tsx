@@ -1,8 +1,10 @@
 
 import React, { useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const ProjectsCarousel = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   const projects = [
     {
@@ -100,12 +102,25 @@ const ProjectsCarousel = () => {
                 <h3 className="text-xl font-bold text-white mb-2 drop-shadow-md">{project.title}</h3>
                 <p className="text-gray-300 text-sm drop-shadow-sm">{project.description}</p>
                 
-                <button className="mt-4 text-red-400 hover:text-red-300 transition-colors duration-200 font-medium drop-shadow-sm hover:drop-shadow-md">
+                <button 
+                  onClick={() => navigate('/portfolio')}
+                  className="mt-4 text-red-400 hover:text-red-300 transition-colors duration-200 font-medium drop-shadow-sm hover:drop-shadow-md"
+                >
                   Voir le projet →
                 </button>
               </div>
             </div>
           ))}
+        </div>
+        
+        {/* Voir tous les projets button */}
+        <div className="text-center mt-12">
+          <button 
+            onClick={() => navigate('/portfolio')}
+            className="px-8 py-4 bg-gradient-to-r from-red-500 to-purple-600 text-white rounded-lg text-lg font-semibold hover:from-red-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-2xl shadow-red-500/30"
+          >
+            Voir tous nos projets
+          </button>
         </div>
       </div>
     </section>

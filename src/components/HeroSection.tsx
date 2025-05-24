@@ -1,7 +1,10 @@
 
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const HeroSection = () => {
+  const navigate = useNavigate();
+
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center text-white">
       <div className="container mx-auto px-6 text-center z-10">
@@ -17,10 +20,21 @@ const HeroSection = () => {
         </p>
         
         <div className="flex flex-col sm:flex-row gap-6 justify-center items-center animate-fade-in">
-          <button className="px-8 py-4 bg-gradient-to-r from-red-500 to-purple-600 text-white rounded-lg text-lg font-semibold hover:from-red-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-2xl shadow-red-500/30 hover:shadow-red-500/50 border border-red-500/20">
+          <button 
+            onClick={() => navigate('/portfolio')}
+            className="px-8 py-4 bg-gradient-to-r from-red-500 to-purple-600 text-white rounded-lg text-lg font-semibold hover:from-red-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-2xl shadow-red-500/30 hover:shadow-red-500/50 border border-red-500/20"
+          >
             Voir nos Réalisations
           </button>
-          <button className="px-8 py-4 border-2 border-gradient-to-r from-red-500 to-purple-600 text-white rounded-lg text-lg font-semibold hover:bg-gradient-to-r hover:from-red-500/20 hover:to-purple-600/20 transition-all duration-300 transform hover:scale-105 shadow-xl shadow-purple-500/20 border-purple-500/50 backdrop-blur-sm">
+          <button 
+            onClick={() => {
+              const element = document.querySelector('#contact');
+              if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+              }
+            }}
+            className="px-8 py-4 border-2 border-gradient-to-r from-red-500 to-purple-600 text-white rounded-lg text-lg font-semibold hover:bg-gradient-to-r hover:from-red-500/20 hover:to-purple-600/20 transition-all duration-300 transform hover:scale-105 shadow-xl shadow-purple-500/20 border-purple-500/50 backdrop-blur-sm"
+          >
             Demander un Devis
           </button>
         </div>
