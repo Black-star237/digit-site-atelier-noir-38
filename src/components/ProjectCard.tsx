@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ExternalLink, Github, Star } from 'lucide-react';
 
 interface Project {
@@ -20,10 +21,24 @@ interface ProjectCardProps {
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ project, featured = false }) => {
+  const navigate = useNavigate();
+
+  const handleCardClick = () => {
+    navigate(`/project/${project.id}`);
+  };
+
+  const handleDetailsClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    navigate(`/project/${project.id}`);
+  };
+
   return (
-    <div className={`relative group bg-gray-900/70 backdrop-blur-sm rounded-2xl overflow-hidden transition-all duration-300 cursor-pointer border border-gray-700/30 hover:shadow-2xl ${
-      featured ? 'hover:shadow-red-500/20 transform hover:scale-105' : 'hover:shadow-purple-500/20 hover:scale-102'
-    }`}>
+    <div 
+      className={`relative group bg-gray-900/70 backdrop-blur-sm rounded-2xl overflow-hidden transition-all duration-300 cursor-pointer border border-gray-700/30 hover:shadow-2xl ${
+        featured ? 'hover:shadow-red-500/20 transform hover:scale-105' : 'hover:shadow-purple-500/20 hover:scale-102'
+      }`}
+      onClick={handleCardClick}
+    >
       {featured && (
         <div className="absolute top-4 right-4 z-10">
           <div className="bg-gradient-to-r from-red-500 to-purple-600 rounded-full p-2 shadow-lg">
@@ -87,7 +102,10 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, featured = false }) 
         </div>
         
         <div className="flex items-center justify-between">
-          <button className="text-red-400 hover:text-red-300 transition-colors duration-200 font-medium text-sm">
+          <button 
+            onClick={handleDetailsClick}
+            className="text-red-400 hover:text-red-300 transition-colors duration-200 font-medium text-sm"
+          >
             Voir les détails →
           </button>
           <div className="flex space-x-2">
