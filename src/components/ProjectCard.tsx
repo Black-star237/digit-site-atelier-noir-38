@@ -2,18 +2,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ExternalLink, Github, Star } from 'lucide-react';
-
-interface Project {
-  id: number;
-  title: string;
-  category: string;
-  image: string;
-  description: string;
-  technologies: string[];
-  demoUrl: string;
-  githubUrl: string;
-  featured?: boolean;
-}
+import { Project } from '../hooks/useProjects';
 
 interface ProjectCardProps {
   project: Project;
@@ -49,7 +38,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, featured = false }) 
       
       <div className="relative overflow-hidden">
         <img
-          src={project.image}
+          src={project.image_url}
           alt={project.title}
           className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
         />
@@ -58,20 +47,24 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, featured = false }) 
         {/* Hover overlay with links */}
         <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
           <div className="flex space-x-4">
-            <a
-              href={project.demoUrl}
-              className="p-3 bg-white/20 backdrop-blur-sm rounded-full hover:bg-white/30 transition-colors duration-200"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <ExternalLink className="w-5 h-5 text-white" />
-            </a>
-            <a
-              href={project.githubUrl}
-              className="p-3 bg-white/20 backdrop-blur-sm rounded-full hover:bg-white/30 transition-colors duration-200"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <Github className="w-5 h-5 text-white" />
-            </a>
+            {project.demo_url && (
+              <a
+                href={project.demo_url}
+                className="p-3 bg-white/20 backdrop-blur-sm rounded-full hover:bg-white/30 transition-colors duration-200"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <ExternalLink className="w-5 h-5 text-white" />
+              </a>
+            )}
+            {project.github_url && (
+              <a
+                href={project.github_url}
+                className="p-3 bg-white/20 backdrop-blur-sm rounded-full hover:bg-white/30 transition-colors duration-200"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <Github className="w-5 h-5 text-white" />
+              </a>
+            )}
           </div>
         </div>
       </div>
@@ -82,7 +75,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, featured = false }) 
             {project.title}
           </h3>
           <span className="px-3 py-1 bg-gradient-to-r from-red-500/20 to-purple-600/20 text-red-400 text-sm rounded-full border border-red-500/30">
-            {project.category}
+            {project.category.label}
           </span>
         </div>
         
@@ -91,12 +84,12 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, featured = false }) 
         </p>
         
         <div className="flex flex-wrap gap-2 mb-4">
-          {project.technologies.map((tech, index) => (
+          {project.technologies.map((tech) => (
             <span
-              key={index}
+              key={tech.id}
               className="px-2 py-1 bg-gray-800/50 text-gray-300 text-xs rounded-md border border-gray-700/50"
             >
-              {tech}
+              {tech.name}
             </span>
           ))}
         </div>
@@ -109,20 +102,24 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, featured = false }) 
             Voir les détails →
           </button>
           <div className="flex space-x-2">
-            <a
-              href={project.demoUrl}
-              className="text-gray-400 hover:text-white transition-colors duration-200"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <ExternalLink className="w-4 h-4" />
-            </a>
-            <a
-              href={project.githubUrl}
-              className="text-gray-400 hover:text-white transition-colors duration-200"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <Github className="w-4 h-4" />
-            </a>
+            {project.demo_url && (
+              <a
+                href={project.demo_url}
+                className="text-gray-400 hover:text-white transition-colors duration-200"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <ExternalLink className="w-4 h-4" />
+              </a>
+            )}
+            {project.github_url && (
+              <a
+                href={project.github_url}
+                className="text-gray-400 hover:text-white transition-colors duration-200"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <Github className="w-4 h-4" />
+              </a>
+            )}
           </div>
         </div>
       </div>

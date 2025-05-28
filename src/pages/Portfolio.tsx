@@ -5,114 +5,40 @@ import Header from '../components/Header';
 import ProjectCard from '../components/ProjectCard';
 import ProjectFilters from '../components/ProjectFilters';
 import Footer from '../components/Footer';
+import { useProjects } from '../hooks/useProjects';
+import { useCategories } from '../hooks/useCategories';
 
 const Portfolio = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const { data: projects = [], isLoading: projectsLoading } = useProjects();
+  const { data: categories = [], isLoading: categoriesLoading } = useCategories();
 
-  const projects = [
-    {
-      id: 1,
-      title: "E-Commerce Luxe",
-      category: "e-commerce",
-      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop",
-      description: "Site e-commerce haute couture avec animations 3D et paiement sécurisé. Interface élégante avec gestion complète des produits.",
-      technologies: ["React", "Node.js", "Stripe", "Three.js"],
-      demoUrl: "#",
-      githubUrl: "#",
-      featured: true
-    },
-    {
-      id: 2,
-      title: "Portfolio Architecte",
-      category: "vitrine",
-      image: "https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=800&h=600&fit=crop",
-      description: "Portfolio moderne pour architecte avec galerie immersive et présentation de projets en 3D.",
-      technologies: ["React", "GSAP", "Three.js", "Tailwind"],
-      demoUrl: "#",
-      githubUrl: "#",
-      featured: true
-    },
-    {
-      id: 3,
-      title: "Dashboard Analytics",
-      category: "application",
-      image: "https://images.unsplash.com/photo-1487887235947-a955ef187fcc?w=800&h=600&fit=crop",
-      description: "Application SaaS avec dashboard analytique, graphiques interactifs et gestion d'équipe.",
-      technologies: ["React", "TypeScript", "Chart.js", "Firebase"],
-      demoUrl: "#",
-      githubUrl: "#",
-      featured: false
-    },
-    {
-      id: 4,
-      title: "Restaurant Gastronomique",
-      category: "vitrine",
-      image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&h=600&fit=crop",
-      description: "Site vitrine pour restaurant avec réservation en ligne et menu interactif.",
-      technologies: ["React", "Node.js", "MongoDB", "Stripe"],
-      demoUrl: "#",
-      githubUrl: "#",
-      featured: false
-    },
-    {
-      id: 5,
-      title: "Landing Page Startup",
-      category: "landing",
-      image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800&h=600&fit=crop",
-      description: "Landing page convertissante pour startup tech avec animations fluides et optimisation SEO.",
-      technologies: ["React", "Framer Motion", "Tailwind", "Vercel"],
-      demoUrl: "#",
-      githubUrl: "#",
-      featured: true
-    },
-    {
-      id: 6,
-      title: "Plateforme E-learning",
-      category: "application",
-      image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&h=600&fit=crop",
-      description: "Plateforme de formation en ligne avec système de progression et certification.",
-      technologies: ["React", "Node.js", "PostgreSQL", "Socket.io"],
-      demoUrl: "#",
-      githubUrl: "#",
-      featured: false
-    },
-    {
-      id: 7,
-      title: "Application Mobile Banking",
-      category: "application",
-      image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop",
-      description: "Interface web pour application bancaire mobile avec sécurité renforcée.",
-      technologies: ["React", "TypeScript", "Redux", "Node.js"],
-      demoUrl: "#",
-      githubUrl: "#",
-      featured: false
-    },
-    {
-      id: 8,
-      title: "Blog Tech Moderne",
-      category: "vitrine",
-      image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&h=600&fit=crop",
-      description: "Blog technologique avec système de commentaires et newsletter intégrée.",
-      technologies: ["React", "Gatsby", "GraphQL", "Netlify"],
-      demoUrl: "#",
-      githubUrl: "#",
-      featured: false
-    }
-  ];
-
-  const categories = [
+  // Transform categories for the filter component
+  const filterCategories = [
     { id: 'all', label: 'Tous les projets' },
-    { id: 'e-commerce', label: 'E-commerce' },
-    { id: 'vitrine', label: 'Sites vitrine' },
-    { id: 'application', label: 'Applications' },
-    { id: 'landing', label: 'Landing pages' }
+    ...categories.map(cat => ({ id: cat.name, label: cat.label }))
   ];
 
   const filteredProjects = selectedCategory === 'all' 
     ? projects 
-    : projects.filter(project => project.category === selectedCategory);
+    : projects.filter(project => project.category.name === selectedCategory);
 
   const featuredProjects = projects.filter(project => project.featured);
+
+  if (projectsLoading || categoriesLoading) {
+    return (
+      <div className="relative min-h-screen bg-black text-white overflow-x-hidden">
+        <AnimatedBackground />
+        <Header />
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-red-500 mx-auto mb-4"></div>
+            <p className="text-xl text-gray-300">Chargement des projets...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="relative min-h-screen bg-black text-white overflow-x-hidden">
@@ -134,18 +60,20 @@ const Portfolio = () => {
       </section>
 
       {/* Featured Projects */}
-      <section className="relative py-20 z-10">
-        <div className="container mx-auto px-6">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 bg-gradient-to-r from-red-500 to-purple-600 bg-clip-text text-transparent">
-            Projets Vedettes
-          </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            {featuredProjects.map((project) => (
-              <ProjectCard key={project.id} project={project} featured={true} />
-            ))}
+      {featuredProjects.length > 0 && (
+        <section className="relative py-20 z-10">
+          <div className="container mx-auto px-6">
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 bg-gradient-to-r from-red-500 to-purple-600 bg-clip-text text-transparent">
+              Projets Vedettes
+            </h2>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+              {featuredProjects.map((project) => (
+                <ProjectCard key={project.id} project={project} featured={true} />
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Filters and All Projects */}
       <section className="relative py-20 z-10">
@@ -155,7 +83,7 @@ const Portfolio = () => {
           </h2>
           
           <ProjectFilters 
-            categories={categories}
+            categories={filterCategories}
             selectedCategory={selectedCategory}
             onCategoryChange={setSelectedCategory}
           />

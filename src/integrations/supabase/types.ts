@@ -9,7 +9,172 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      categories: {
+        Row: {
+          created_at: string
+          id: string
+          label: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          label: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          label?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      project_images: {
+        Row: {
+          alt_text: string | null
+          created_at: string
+          id: string
+          image_url: string
+          order_index: number | null
+          project_id: string
+        }
+        Insert: {
+          alt_text?: string | null
+          created_at?: string
+          id?: string
+          image_url: string
+          order_index?: number | null
+          project_id: string
+        }
+        Update: {
+          alt_text?: string | null
+          created_at?: string
+          id?: string
+          image_url?: string
+          order_index?: number | null
+          project_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_images_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      project_technologies: {
+        Row: {
+          id: string
+          project_id: string
+          technology_id: string
+        }
+        Insert: {
+          id?: string
+          project_id: string
+          technology_id: string
+        }
+        Update: {
+          id?: string
+          project_id?: string
+          technology_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_technologies_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_technologies_technology_id_fkey"
+            columns: ["technology_id"]
+            isOneToOne: false
+            referencedRelation: "technologies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      projects: {
+        Row: {
+          category_id: string
+          client: string | null
+          created_at: string
+          demo_url: string | null
+          description: string
+          duration: string | null
+          featured: boolean | null
+          github_url: string | null
+          id: string
+          image_url: string
+          long_description: string | null
+          title: string
+          updated_at: string
+          year: number | null
+        }
+        Insert: {
+          category_id: string
+          client?: string | null
+          created_at?: string
+          demo_url?: string | null
+          description: string
+          duration?: string | null
+          featured?: boolean | null
+          github_url?: string | null
+          id?: string
+          image_url: string
+          long_description?: string | null
+          title: string
+          updated_at?: string
+          year?: number | null
+        }
+        Update: {
+          category_id?: string
+          client?: string | null
+          created_at?: string
+          demo_url?: string | null
+          description?: string
+          duration?: string | null
+          featured?: boolean | null
+          github_url?: string | null
+          id?: string
+          image_url?: string
+          long_description?: string | null
+          title?: string
+          updated_at?: string
+          year?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "projects_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      technologies: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
